@@ -64,7 +64,7 @@ def insertDB(content):
 
 if __name__ == "__main__":
     # for url in alllist:
-    url ='http://www.linuxdiyf.com/articlelist.php?id=3'
+    url ='http://www.linuxdiyf.com/articlelist.php?id=7&page=1'
 
     html = get_one_page(url)
     content = parse_page(html)
