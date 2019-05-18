@@ -1,0 +1,200 @@
+http://www.linuxe.cn/post-273.html
+
+
+
+ansible是一个轻量级的自动化运维工具，可以实现批量的系统配置，
+程序部署，批量运行命令等哦功能
+
+
+现在自动化运维工具在实现远程管理时主要有以下两类：
+
+１．agent类：被管理端需要安装agented程序，如puppet,func,saltstack
+2.agent less类：在被管理端无需agented程序，可以通过
+ssh服务连直接管理，如ansible
+
+一、Ansible与其他自动化运维工具相比有以下特点：
+
+1、学习曲线平缓，比puppet易学很多
+2、无客户端、无服务器端，基于SSH工作，无需SSL
+3、基于模块化实现，可以用任意语言编写模块，包括shell脚本，只要遵循ansible的风格即可
+
+4、可以将众多操作放在一个配置文件中，无需在命令行中指明，该配置文件称作playbook，ansible会读取配置文件执行。配置文件语法和saltstack一样是YAML格式，是一种简化的json或者xml格式
+
+
+二、Ansible工作架构：
+
+1、被管理的主机需要提前定义在主机列表文件中，和saltstack的认证类似。
+2、ansible的大部分管理工作都是通过核心模块来完成，如定义哪个主机需要安装哪个服务等。
+3、可以自定义模块来完成ansible本身不具备的功能。
+
+4、把需要完成的任务定义在一个YAML格式编写的文件中，可以多次调用。
+
+三、安装Ansible：
+
+
+四、Ansible的基本配置：
+
+1、ansible服务主配置文件：/etc/ansible/ansible.cfg，该文件基本可以不用动
+
+2、主机列表配置文件：/etc/ansible/hosts，被管理的每个主机都需要在此文件中有定义。如果没有定义在主机列表文件中，执行命令会提示“No hosts matched”
+
+3、ansible默认使用SSH服务管理，每次需要输入被管理服务器的账号密码，为避免繁琐，可以使用SSH免秘钥登录的方式，将服务器端生成的秘钥发送给其他被管理的机器；或者将登录信息记录在inventory主机列表文件中，参见本站文章《自动化运维工具ansible实现免密码连接》
+
+
+4、ansible的基本语法：
+
+1
+ansible <host-pattern> [-f forks] [-m module_name] [-a args]
+
+
+<host-pattern>：该选项指定ansible命令对哪些主机生效，可以使用主机列表中的地址或者组名，all代表所有主机
+
+[-f forks]：并发数，可以理解为ansible一次性要让多少个主机执行任务
+
+[-m module_name]：使用的模块名
+
+[-a args]：每个模块特有的参数，可以用ansible-doc -s 模块名来查看模块对应参数
+
+五、查看Ansible模块帮助信息：
+
+1、通过ansible-doc -l命令可以显示当前版本所支持的模块信息
+
+2、通过ansible-doc -s modulename显示指定模块的详细用法，如ansible-doc -s yum
+
+
+自动化运维工具Ansible入门教程（二）Ansible常用模块的使用
+
+Ansible常用模块用法介绍：
+
+（1）command模块：让远端主机执行命令，当没有用-m选项指定参数时，默认使用command模块
+
+
+1
+ansible 192.168.44.130 -a 'date'
+
+
+（2）cron模块：设置定时任务，其中有个state选项包含present、absent两个参数，分别代表增加和移除
+
+（3）user模块：管理用户，还有一个group模块用于管理组
+
+（4）copy模块：实现文件复制
+
+    src=：定义本地源文件的路径
+
+    dset=：定义目标文件路径
+
+    content=：用该选项直接生成内容，替代src
+
+    backup=：如果目标路径存在同名文件，将自动备份该文件
+
+（5）file模块：设置文件的属性，如所属主、文件权限等
+
+path：指定要设置的文件所在路径，可使用name或dest替换
+
+创建文件的软连接：
+
+src：指明源文件
+
+path：指明符号连接文件路径
+
+state：指明文件的格式，touch=创建新的文件；absent=删除文件，link=创建软连接文件；directory=创建目录
+
+（6）ping模块：测试远端主机是否能连接
+
+（7）service模块：控制服务运行状态
+
+    enabled：是否开机自动启动，取值为true或者false
+
+    name：服务名称
+
+    state：状态，取值有started，stopped，restarted
+
+（8）shell模块：和command模块一样是用来运行命令，当命令中有变量或者管道符的时候要用shell模块
+
+
+10）yum模块：安装程序包，远端主机需要先配置好正确的yum源
+
+    name：指明要安装的程序包，可以带上版本号，否则默认安装最新版本，多个安装包用逗号分隔
+
+    state：present代表安装，也是默认操作；absent是卸载；latest最新版本安装
+
+（11）setup模块：收集被管理主机的信息，包含系统版本、IP地址、CPU核心数。在Ansible高级操作中可以通过该模块先收集信息，然后根据不同主机的不同信息做响应操作，类似Zabbix中的低级别发现自动获取磁盘信息一样。
+
+
+自动化运维工具Ansible入门教程（三）YAML与playbook
+
+
+需要分别使用yum或command模块安装程序、然后使用copy模块复制配置文件、使用service模块启动服务。为了解决这种多任务繁琐的情况，可以使用playbook（剧本）。剧本是包含了一系列任务的Ansible配置文件，通过YAML标记语言构建，通常配置文件以.yml结尾。YAML是一个高可读性的用来表达资料序列的格式语言，和XML不同的是YAML语法结构使用了键值+缩进格式，而不是标签格式。YAML在设计时也参考了多种编程语言（包含XML、PYTHON、PERL、C语言等），YAML和脚本语言的交互性能好，并且有很高的扩展性和表达能力。
+
+ansible的playbook主要有一下组成部分：
+Inventory:主机列表，表示剧本中的任务要应用在哪些主机上
+Modules：要调用ansible哪些模块
+Commands:在主机上要运行哪些命令
+Playbooks:
+
+Task(核心):任务，即调用哪些模块完成操作
+Variables:变量
+Templates:模板
+Handlers:处理器，由某事件触发执行的操作
+Roles:角色，定义哪个角色做哪些任务
+
+
+playbook中的每一个play的目的都是为了让某个主机以指定用户的身份去执行某个任务， hosts用于指定要执行任务的主机（该主机一定要在Inventory主机列表中定义），可以是一个或多个，由冒号分割。user或者remote_user都可用于指定执行任务的用户，可以单独给每个tasks定义，如上面示例中的：
+
+playbook中常用选项：
+
+remote_user：指定执行任务的用户（可单独给每个task定义），通常是root用户，也可指定非root用户使用sudo方式执行任务
+
+hosts：指定远程主机（多个主机用逗号分隔）或主机组
+
+user（可省略）：指定远程主机上执行任务的用户,这里假设使用了tom这个用户
+
+sudo（可省略）：如果设置为yes，那么user中指定的tom用户在执行任务时会获得root权限
+
+sudo_user（可省略）：指定sudo时切换的用户，如sudo_user设置为jerry，那么之前设置的user tom在sudo时就会使用jerry的权限执行任务
+
+connection（可省略）：通过什么方式连接到远程主机，默认为SSH    
+
+gather_facts（可省略）：如果明确不需要通过setup模块来获取远程主机facts信息，可以使用这个选项
+
+简单示例1：创建nginx用户和nginx组
+
+四：Inventory内置变量于免密码连接
+
+
+ansible,通过ssh来批量管理服务器，
+
+Ansible是无agent端的，它通过SSH来批量管理服务器，既然是SSH，那么在通过ansible连接远程主机时是需要输入远程主机密码的。为了方便管理，可以实现无密码登录，以下是三种实现方式：
+
+1、使用Ansible自带的-k选项：
+
+ansible all -m setup -k -u root
+
+-u：指定连接时的用户名，默认就是root，所以使用的是root用户的话不加该选项也是可以的
+
+-k：提示输入密码，是--ask-pass的简写形式
+
+2、使用内置变量把用户名密码写在Inventory中，也就是/etc/ansible/hosts文件里，缺点就是暴露了账号密码，不安全。如果有多个主机需要使用同样的变量，可以用组变量的形式，书写格式如下：
+
+使用ansible 组名 --list-hosts可以查看对应组里的主机
+
+Ansible Inventory常用内置变量：
+
+ansible_ssh_host：定义host ssh地址
+
+ansible_ssh_port：定义host ssh端口
+
+ansible_ssh_user：定义host ssh 认证用户
+
+ansible_ssh_pass：定义ssh认证密码
+
+ansible_sudo：定义sudo用户
+
+ansible_sudo_pass：定义sudu密码
+
+3、使用SSH免秘钥登录的形式（推荐）
+
+实现秘钥登录可以参考文章《SSH KEY免密码验证实现文件分发教程》,之后就不需要输入密码即可远程连接上了
+
+自动化运维工具Ansible入门教程（五）使用handlers监控变化的资源
+
