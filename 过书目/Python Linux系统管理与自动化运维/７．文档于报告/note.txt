@@ -1,0 +1,19 @@
+
+文档与报告
+
+7.1 使用Python处理excel文档
+
+使用openpyxl读取Excel文档
+
+案例：合并多个Excel文档到一个Excel文档
+
+
+7.2 使用python操作pdf文档
+7.3 使用Python归档图片
+
+7.4发送报告
+
+7.4.1 SMTP协议
+
+7.4.2 邮箱设置
+7.4.3 使用标准库的smtplib与mime发送邮件

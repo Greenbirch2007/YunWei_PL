@@ -1,0 +1,29 @@
+
+python自动化管理
+
+
+9.1 使用ssh协议访问远程服务器
+
+ssh协议，openssh协议
+
+9.1.3 使用密钥登录远程服务器
+
+ssh-keygen
+
+9.1.4 使用ssh-agent管理私钥
+
+9.2 使用Polysh批量管理服务器
+
+
+9.2.1 批量修改密码
+
+9.2.2 polysh的使用
+
+9.3 SSH协议的python实现paramiko
+
+9.4 自动化部署工具Fabric
+
+
+9.4.6 Fabric提供的上下文管理器
+
+使用Fabric部署Flask应用

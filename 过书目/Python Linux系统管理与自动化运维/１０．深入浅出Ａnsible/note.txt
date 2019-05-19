@@ -1,0 +1,12 @@
+
+
+
+ansible:不需要守护进程
+日志集中存储
+ansile简单易用
+ansible功能强大
+ansible对云计算和大数据平台都有平台的支持
+
+安装ansible入门
+
+

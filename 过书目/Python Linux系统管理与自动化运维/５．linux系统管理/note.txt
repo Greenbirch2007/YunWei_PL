@@ -1,0 +1,132 @@
+
+
+linux系统管理
+
+5.1 文件读写
+
+5.1.1  Python 内置的open函数
+5.1.2避免文件句柄泄露
+
+5.1.3 常见的文件操作函数
+
+
+read:读取文件中的所有内容
+readline:一次读取一次
+readlines:将文件内容存到一个列表中，列表中的每一行对应于文件中的每一行
+
+
+两个写函数：
+1.write:写字符串到文件中，并返回写入的字符数
+2.writelines:写一个字符串列表到文件中
+
+
+5.1.4  python的文件是一个可迭代对象
+
+5.1.5  案例：将文件中所有单词的首字母变成大写
+
+5.2  文件于文件路径管理
+
+
+5.2.1 使用os.path进行路径和文件管理
+
+
+1.拆分路径
+
+os.path模块用来对文件和路径进行管理
+
+split,dirname,basename,splittext
+
+
+2.构建路径
+
+expanduser,abspath,join
+
+3.获取文件属性
+
+os.path模块也包含了若干函数用来获取文件的属性，包括文件的创建时间，
+修改时间，文件的大小等
+
+getatime,getmtime,getctime,getsize
+
+4.判断文件类型
+
+
+exists,isfile,isdir,silink,ismount
+
+
+5.2.2  使用os模块管理文件和目录
+
+unlink,remote,rmdir,mkdir,rename
+
+os模块也包含了修改文件权限，判断文件权限的函数，即chmod,access
+
+
+5.2.3  案例打印最常用的10条linux命令
+
+
+5.3查找文件
+
+5.3.1 使用 fnmatch找到特定的文件
+
+fnmatch,fnmatchcase,filter,translate
+5.3.2  使用glob找到特定的文件
+
+5.3.3 使用os.walk遍历目录树
+
+5.3.4 案例：找到目录下最大(最老)的十个文件
+
+5.4 高级文件处理接口shutil
+
+5.4.1 复制文件和文件夹
+shutil.copy()
+shutil.copytree()
+
+
+5.4.2 文件和文件夹的移动与改名
+
+5.4.3  删除目录
+
+5.5 文件内容
+
+5.5.1 目录和文件比较
+
+filecmp
+
+5.5.2 MD5校验和比较
+
+5.5.3  案例：找到目录下的重复文件
+
+5.6 使用Python管理压缩包
+
+5.6.1  使用tarfile库读取与创建创建tar包
+
+1.读取tar包
+
+getnames:
+extract:
+extractall
+
+
+2.创建tar包
+
+
+5.6.3 案例：备份指定文件到压缩包中
+
+5.6.4 使用zipfile库创建和读取zip压缩包
+
+1.读取zip文件
+2.创建zip文件
+3.使用python的命令行工具创建zip格式的压缩包
+
+5.6.5 案例：暴力破解zip压缩包的密码
+
+5.6.6 使用shutil创建和读取压缩包
+
+1.shutil创建压缩包
+
+5.7 python中执行外部命令
+
+subprocess
+
+5.8综合案例：使用python部署MongoDB
+
