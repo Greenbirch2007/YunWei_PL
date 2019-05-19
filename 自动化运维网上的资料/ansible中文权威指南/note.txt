@@ -1,0 +1,50 @@
+http://www.ansible.com.cn/docs/intro_installation.html
+
+
+Docs » Playbooks 马哥Linux团队荣誉出品
+Playbooks
+Playbooks 是 Ansible的配置,部署,编排语言.他们可以被描述为一个需要希望远程主机执行命令的方案,或者一组IT程序运行的命令集合.
+
+Playbook 语言的示例
+Playbooks 的格式是YAML（详见:YAML 语法）,语法做到最小化,意在避免 playbooks 成为一种编程语言或是脚本,但它也并不是一个配置模型或过程的模型.
+
+
+playbook基础
+主机与用户
+你可以为 playbook 中的每一个 play,个别地选择操作的目标机器是哪些,以哪个用户身份去完成要执行的步骤（called tasks）.
+
+hosts 行的内容是一个或多个组或主机的 patterns,以逗号为分隔符,详见 Patterns 章节.
+remote_user 就是账户名:
+
+---
+- hosts: webservers
+  remote_user: root
+
+
+Tasks 列表
+每一个 play 包含了一个 task 列表（任务列表）.一个 task 在其所对应的所有主机上（通过 host pattern 匹配的所有主机）执行完毕之后,下一个 task 才会执行.有一点需要明白的是（很重要）,在一个 play 之中,所有 hosts 会获取相同的任务指令,这是 play 的一个目的所在,也就是将一组选出的 hosts 映射到 task.（注:此处翻译未必准确,暂时保留原文）
+Handlers: 在发生改变时执行的操作
+上面我们曾提到过,module 具有”幂等”性,所以当远端系统被人改动时,可以重放 playbooks 达到恢复的目的. playbooks 本身可以识别这种改动,并且有一个基本的 event system（事件系统）,可以响应这种改动.
+
+（当发生改动时）’notify’ actions 会在 playbook 的每一个 task 结束时被触发,而且即使有多个不同的 task 通知改动的发生, ‘notify’ actions 只会被触发一次.
+
+
+
+执行一个 playbook
+既然现在你已经学习了 playbook 的语法,那要如何运行一个 playbook 呢？这很简单,这里的示例是并行的运行 playbook,并行的级别 是10（译者注:是10个并发的进程？）:
+
+Playbook 角色(Roles) 和 Include 语句
+
+
+角色默认变量(Role Default Variables)
+
+在 Roles 中嵌入模块
+
+合法的变量名
+在使用变量之前最好先知道什么是合法的变量名. 变量名可以为字母,数字以及下划线.变量始终应该以字母开头. “foo_port”是个合法的变量名.”foo5”也是. “foo-port”, “foo port”, “foo.port” 和 “12”则不是合法的变量名.
+
+很简单吧,继续往下看.
+
+在Inventory中定义变量
+
+

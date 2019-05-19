@@ -5,4 +5,11 @@
 
 2.1  python内置小工具
 
-２．１．１　
+２．5 python调试器
+
+2.6 python代码规范检查
+
+2.7 python工作环境管理
+
+pyenv
+
